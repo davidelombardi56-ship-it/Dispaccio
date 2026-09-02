@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>DISPACCIO — Notizie di mercato</title>
+
+<!-- Home screen / PWA-like setup -->
+<meta name="theme-color" content="#E8EEF5">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Dispaccio">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjoiRGlzcGFjY2lvIiwic2hvcnRfbmFtZSI6IkRpc3BhY2NpbyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMwRDE0MjAiLCJ0aGVtZV9jb2xvciI6IiMwRDE0MjAiLCJzdGFydF91cmwiOiIuIn0=">
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODAgMTgwIj4KPHJlY3Qgd2lkdGg9IjE4MCIgaGVpZ2h0PSIxODAiIGZpbGw9IiMwRDE0MjAiLz4KPHJlY3QgeD0iMTYiIHk9IjE2IiB3aWR0aD0iMTQ4IiBoZWlnaHQ9IjE0OCIgcng9IjYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0M5QTI0QiIgc3Ryb2tlLXdpZHRoPSIyIi8+Cjx0ZXh0IHg9IjkwIiB5PSIxMTgiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLCAnVGltZXMgTmV3IFJvbWFuJywgc2VyaWYiIGZvbnQtc2l6ZT0iOTIiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNDOUEyNEIiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkQ8L3RleHQ+Cjwvc3ZnPg==">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODAgMTgwIj4KPHJlY3Qgd2lkdGg9IjE4MCIgaGVpZ2h0PSIxODAiIGZpbGw9IiMwRDE0MjAiLz4KPHJlY3QgeD0iMTYiIHk9IjE2IiB3aWR0aD0iMTQ4IiBoZWlnaHQ9IjE0OCIgcng9IjYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI0M5QTI0QiIgc3Ryb2tlLXdpZHRoPSIyIi8+Cjx0ZXh0IHg9IjkwIiB5PSIxMTgiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLCAnVGltZXMgTmV3IFJvbWFuJywgc2VyaWYiIGZvbnQtc2l6ZT0iOTIiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNDOUEyNEIiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkQ8L3RleHQ+Cjwvc3ZnPg==">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Vetro e luce — palette ufficiale Dispaccio */
+    --sky-1: #E8EEF5;
+    --sky-2: #DCE6F0;
+    --deep: #16273B;
+    --navy: #21456E;
+    --navy-soft: #5A7699;
+    --gold: #B8933D;
+    --glass: rgba(255,255,255,0.55);
+    --glass-2: rgba(255,255,255,0.4);
+    --glass-line: rgba(255,255,255,0.8);
+    --line: rgba(22,39,59,0.12);
+    --line-soft: rgba(22,39,59,0.07);
+
+    /* Segnali (armonizzati coi toni chiari) */
+    --sage: #4E8C63;
+    --rust: #C24B36;
+
+    /* Impact / stabilità — 4 fasce */
+    --imp-bianco: #7A8AA0;
+    --imp-rosso: #C24B36;
+    --imp-giallo: #B8933D;
+    --imp-verde: #4E8C63;
+
+    --radius-s: 10px;
+    --radius-m: 16px;
+    --radius-l: 22px;
+    --shadow-s: 0 8px 24px -14px rgba(22,39,59,0.25);
+    --shadow-m: 0 14px 40px -18px rgba(22,39,59,0.28);
+    --shadow-pop: 0 20px 50px -18px rgba(22,39,59,0.32);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0; padding:0;}
+  body{
+    background:var(--sky-1);
+    color:var(--deep);
+    font-family:'Manrope', sans-serif;
+    min-height:100vh;
+    position:relative;
+    -webkit-tap-highlight-color:transparent;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--navy); color:#fff;}
+  /* Orbs di luce dietro il vetro — atmosfera viva che respira (ripresa da A) */
+  body::before{
+    content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(620px 520px at 10% 6%, rgba(120,165,220,0.5), transparent 60%),
+      radial-gradient(720px 620px at 90% 20%, rgba(184,147,61,0.16), transparent 55%),
+      radial-gradient(640px 720px at 72% 104%, rgba(33,69,110,0.2), transparent 60%);
+    animation:breathe 16s ease-in-out infinite alternate;
+  }
+  @keyframes breathe{0%{opacity:0.8; transform:scale(1);} 100%{opacity:1; transform:scale(1.05);}}
+  @media (prefers-reduced-motion: reduce){ body::before{animation:none;} }
+
+  .sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;}
+  a{color:var(--navy);}
+  a:focus-visible, button:focus-visible, input:focus-visible, .ticker-badge:focus-visible{
+    outline:2px solid var(--navy); outline-offset:2px; border-radius:6px;
+  }
+
+  /* ---------- Ticker tape ---------- */
+  .env-banner{
+    position:relative; z-index:2;
+    max-width:1120px; margin:12px auto 0; padding:14px 22px;
+    background:rgba(194,75,54,0.1); border:1px solid rgba(194,75,54,0.3);
+    border-radius:var(--radius-m); color:var(--deep);
+    font-family:'Manrope', sans-serif; font-size:0.86rem; line-height:1.5;
+  }
+  .env-banner b{color:var(--rust);}
+  .tape-wrap{
+    position:relative; z-index:2;
+    background:var(--glass); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+    border-bottom:1px solid var(--glass-line);
+    overflow:hidden; white-space:nowrap; height:38px;
+    -webkit-mask-image:linear-gradient(90deg, transparent 0, #000 40px, #000 calc(100% - 40px), transparent 100%);
+    mask-image:linear-gradient(90deg, transparent 0, #000 40px, #000 calc(100% - 40px), transparent 100%);
+  }
+  .tape-track{display:inline-flex; align-items:center; height:100%; animation:scrollTape 60s linear infinite; will-change:transform;}
+  @keyframes scrollTape{0%{transform:translateX(0);} 100%{transform:translateX(-50%);}}
+  .tape-item{display:inline-flex; align-items:center; gap:8px; font-size:0.76rem; letter-spacing:0.01em; padding:0 22px; color:var(--navy-soft); height:100%;}
+  .tape-item .tk{color:var(--deep); font-weight:600;}
+  .sentiment-mark{font-size:0.7em; line-height:1;}
+  .sent-positivo{color:var(--sage);}
+  .sent-negativo{color:var(--rust);}
+  .sent-neutro{color:var(--navy-soft);}
+  @media (prefers-reduced-motion: reduce){ .tape-track{animation:none;} .tape-wrap{overflow-x:auto; mask-image:none; -webkit-mask-image:none;} }
+
+  /* ---------- Masthead ---------- */
+  .masthead{
+    position:relative; z-index:2;
+    display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:16px;
+    max-width:1120px; margin:20px auto 0; padding:20px 26px;
+    background:var(--glass); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+    border:1px solid var(--glass-line); border-radius:var(--radius-m);
+    box-shadow:var(--shadow-s);
+  }
+  .masthead-title{font-family:'Fraunces', serif; font-weight:600; font-size:clamp(1.7rem,4vw,2.3rem); letter-spacing:-0.01em; margin:0; line-height:1; color:var(--deep);}
+  .masthead-title .dot{color:var(--gold);}
+  .masthead-sub{font-family:'Manrope', sans-serif; font-size:0.82rem; letter-spacing:0.02em; color:var(--navy-soft); margin-top:8px;}
+  .masthead-right{display:flex; align-items:center; gap:16px;}
+  .masthead-date{font-size:0.8rem; color:var(--navy-soft); text-align:right; line-height:1.45;}
+  .masthead-date b{color:var(--deep); display:block; font-size:0.86rem; font-weight:600;}
+
+  .btn{
+    font-family:'Manrope', sans-serif; font-weight:600; letter-spacing:0.01em; font-size:0.86rem;
+    padding:12px 22px; min-height:44px; border-radius:12px; cursor:pointer;
+    border:none; background:var(--navy); color:#fff;
+    box-shadow:0 10px 26px -12px rgba(33,69,110,0.5);
+    transition:transform .2s ease, box-shadow .25s ease, background .2s ease;
+  }
+  .btn:hover:not(:disabled){transform:translateY(-2px); box-shadow:0 14px 32px -12px rgba(33,69,110,0.55);}
+  .btn:active:not(:disabled){transform:translateY(0);}
+  .btn:disabled{opacity:0.5; cursor:progress;}
+  .btn-ghost{
+    background:var(--glass-2); color:var(--navy); border:1px solid var(--glass-line);
+    box-shadow:none;
+  }
+  .btn-ghost:hover:not(:disabled){background:rgba(255,255,255,0.7); color:var(--deep); transform:translateY(-1px);}
+  .btn-small{padding:9px 15px; min-height:38px; font-size:0.8rem;}
+
+  /* ---------- Tabs ---------- */
+  .tabs{
+    position:relative; z-index:2;
+    display:flex; gap:2px; max-width:1120px; margin:14px auto 0; padding:6px;
+    background:var(--glass); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+    border:1px solid var(--glass-line); border-radius:14px; box-shadow:var(--shadow-s);
+  }
+  .tab-btn{
+    font-family:'Manrope', sans-serif; font-weight:600; font-size:0.9rem;
+    padding:12px 22px; min-height:44px; color:var(--navy-soft);
+    border:none; background:none; cursor:pointer; border-radius:10px;
+    transition:color .2s ease, background .2s ease;
+  }
+  .tab-btn:hover{color:var(--deep);}
+  .tab-btn[aria-selected="true"]{color:#fff; background:var(--navy); box-shadow:0 8px 20px -10px rgba(33,69,110,0.5);}
+
+  .page{position:relative; z-index:2; max-width:1120px; margin:0 auto; padding:28px 26px 80px;}
+  .view{display:none;}
+  .view.active{display:block;}
+
+  /* ---------- Controls ---------- */
+  .controls{display:flex; flex-wrap:wrap; gap:12px; align-items:center; padding-bottom:22px; margin-bottom:26px; border-bottom:1px solid var(--line);}
+  .chip-row{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{
+    font-family:'Manrope', sans-serif; font-size:0.82rem; font-weight:500; letter-spacing:0.01em;
+    padding:9px 15px; min-height:38px; border:1px solid var(--glass-line); border-radius:20px;
+    color:var(--navy-soft); cursor:pointer; background:var(--glass-2);
+    transition:background .2s ease, border-color .2s ease, color .2s ease;
+  }
+  .chip[aria-pressed="true"]{border-color:var(--navy); color:#fff; background:var(--navy);}
+  .chip:hover{color:var(--deep);}
+  .chip[aria-pressed="true"]:hover{color:#fff;}
+
+  .search-input{
+    font-family:'Manrope', sans-serif; font-size:1rem;
+    background:var(--glass); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    border:1px solid var(--glass-line); color:var(--deep);
+    padding:11px 16px; border-radius:12px; min-width:220px; flex:1; min-height:44px;
+  }
+  .search-input::placeholder{color:var(--navy-soft);}
+
+  .status-line{font-family:'Manrope', sans-serif; font-size:0.82rem; color:var(--navy-soft); margin-bottom:24px;}
+
+  /* ---------- News sections ---------- */
+  .category-section{margin-bottom:34px;}
+  .news-section-head{display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:10px;}
+  .category-eyebrow{
+    font-family:'Fraunces', serif; font-weight:600; font-size:1.35rem; color:var(--deep);
+    margin:0; letter-spacing:-0.01em; flex:1;
+  }
+  .section-status{font-family:'Manrope', sans-serif; font-size:0.8rem; color:var(--navy-soft); margin-bottom:12px;}
+
+  /* News card — vetro */
+  .news-item{
+    display:grid; grid-template-columns:100px 1fr; gap:20px;
+    background:var(--glass); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+    border:1px solid var(--glass-line); border-radius:var(--radius-m);
+    padding:20px 24px; margin-bottom:14px;
+    box-shadow:var(--shadow-s);
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .news-item:hover{transform:translateY(-2px); box-shadow:var(--shadow-m);}
+  .news-ticker-col{display:flex; flex-direction:column; align-items:flex-start; gap:8px;}
+  .ticker-badge{
+    font-family:'Fraunces', serif; font-weight:600; font-size:1rem; color:var(--deep);
+    background:var(--glass-2); border:1px solid var(--glass-line); border-radius:10px;
+    padding:8px 12px; display:inline-flex; align-items:center; gap:7px; cursor:pointer;
+    min-height:38px; transition:background .2s ease, color .2s ease;
+  }
+  .ticker-badge:hover{background:rgba(255,255,255,0.75); color:var(--navy);}
+
+  .news-body .universe-tag{font-family:'Manrope', sans-serif; font-size:0.78rem; color:var(--navy-soft);}
+  .news-title-row{display:flex; align-items:flex-start; justify-content:space-between; gap:14px; margin:5px 0 6px;}
+  .news-title{font-family:'Fraunces', serif; font-size:1.16rem; font-weight:600; color:var(--deep); line-height:1.32; flex:1;}
+  .news-analysis{font-family:'Manrope', sans-serif; font-size:0.94rem; color:var(--navy-soft); line-height:1.6;}
+  .news-source{font-family:'Manrope', sans-serif; font-size:0.74rem; color:var(--navy-soft); margin-top:8px; letter-spacing:0.02em; opacity:0.8;}
+
+  /* Impact badge + nota */
+  .impact-badge{
+    font-family:'Fraunces', serif; font-weight:600; font-size:0.92rem;
+    padding:4px 11px; border-radius:8px; border:1px solid; line-height:1.3;
+    flex:none; min-width:40px; text-align:center;
+  }
+  .impact-bianco{color:var(--imp-bianco); border-color:rgba(122,138,160,0.35); background:rgba(122,138,160,0.08);}
+  .impact-rosso{color:var(--imp-rosso); border-color:rgba(194,75,54,0.35); background:rgba(194,75,54,0.08);}
+  .impact-giallo{color:var(--imp-giallo); border-color:rgba(184,147,61,0.4); background:rgba(184,147,61,0.1);}
+  .impact-verde{color:var(--imp-verde); border-color:rgba(78,140,99,0.4); background:rgba(78,140,99,0.1);}
+  .impact-note{font-family:'Manrope', sans-serif; font-size:0.84rem; color:var(--navy-soft); line-height:1.5; margin-top:8px; padding-left:12px; border-left:2px solid var(--line);}
+  .impact-note-label{font-family:'Manrope', sans-serif; font-weight:600; font-size:0.76rem; letter-spacing:0.02em; color:var(--navy);}
+
+  /* Stability badge (mini, sotto ticker) */
+  .stability-badge{
+    font-family:'Fraunces', serif; font-weight:600; font-size:0.76rem;
+    padding:2px 8px; border-radius:7px; border:1px solid; line-height:1.3;
+    text-align:center; min-width:34px;
+  }
+
+  /* ---------- Skeletons ---------- */
+  .skeleton-line{height:12px; border-radius:6px; background:linear-gradient(90deg, var(--glass-2) 25%, rgba(255,255,255,0.7) 50%, var(--glass-2) 75%); background-size:200% 100%; animation:shimmer 1.5s infinite; margin-bottom:9px;}
+  @keyframes shimmer{0%{background-position:200% 0;} 100%{background-position:-200% 0;}}
+  @media (prefers-reduced-motion: reduce){ .skeleton-line{animation:none; opacity:0.6;} }
+  .error-note{font-family:'Manrope', sans-serif; font-size:0.86rem; color:var(--rust); padding:10px 0;}
+  .empty-note{font-family:'Manrope', sans-serif; font-size:0.88rem; color:var(--navy-soft); padding:10px 0 20px;}
+
+  /* ---------- Watchlist ---------- */
+  .watchlist-box{
+    background:var(--glass); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+    border:1px solid var(--glass-line); border-radius:var(--radius-l);
+    box-shadow:var(--shadow-s); padding:20px 24px; margin-bottom:28px;
+  }
+  .watchlist-box h2{font-family:'Fraunces', serif; font-size:1.1rem; font-weight:600; color:var(--deep); margin:0 0 14px;}
+  .watchlist-row{display:flex; flex-wrap:wrap; gap:9px; align-items:center;}
+  .watchlist-tag{font-family:'Fraunces', serif; font-size:0.82rem; font-weight:600; background:var(--glass-2); border:1px solid var(--glass-line); color:var(--deep); padding:7px 8px 7px 12px; border-radius:20px; display:inline-flex; align-items:center; gap:8px; min-height:36px;}
+  .watchlist-tag button{background:none; border:none; color:var(--navy-soft); cursor:pointer; font-size:1rem; line-height:1; padding:4px; min-width:24px; min-height:24px; border-radius:50%;}
+  .watchlist-tag button:hover{color:var(--rust); background:rgba(194,75,54,0.1);}
+  .watchlist-add{display:flex; gap:8px; margin-left:auto;}
+  .watchlist-add input{font-family:'Manrope', sans-serif; background:var(--glass); border:1px solid var(--glass-line); color:var(--deep); padding:9px 12px; border-radius:10px; width:120px; min-height:40px; font-size:1rem;}
+  .watchlist-add input::placeholder{color:var(--navy-soft);}
+
+  /* ---------- Company view ---------- */
+  .company-search{display:flex; gap:10px; margin-bottom:10px;}
+  .company-search input{flex:1; font-family:'Manrope', sans-serif; font-size:1rem; background:var(--glass); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border:1px solid var(--glass-line); color:var(--deep); padding:12px 16px; border-radius:12px; min-height:44px;}
+  .company-search input::placeholder{color:var(--navy-soft);}
+  .company-hint{font-family:'Manrope', sans-serif; font-size:0.82rem; color:var(--navy-soft); margin-bottom:28px; line-height:1.5;}
+  .company-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(290px, 1fr)); gap:16px;}
+  .company-card{
+    background:var(--glass); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+    border:1px solid var(--glass-line); border-radius:var(--radius-l);
+    box-shadow:var(--shadow-s); padding:22px 24px;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .company-card:hover{transform:translateY(-2px); box-shadow:var(--shadow-m);}
+  .company-top{display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:11px;}
+  .company-ticker{font-family:'Fraunces', serif; font-weight:600; font-size:0.92rem; color:var(--navy);}
+  .company-sector{font-family:'Manrope', sans-serif; font-size:0.72rem; color:var(--navy-soft); text-align:right;}
+  .company-name{font-family:'Fraunces', serif; font-weight:600; font-size:1.15rem; color:var(--deep); margin:0 0 9px;}
+  .company-desc{font-family:'Manrope', sans-serif; font-size:0.9rem; color:var(--navy-soft); line-height:1.6;}
+  .company-meta{font-family:'Manrope', sans-serif; font-size:0.72rem; color:var(--navy-soft); margin-top:13px; opacity:0.85;}
+  .company-empty{text-align:center; padding:64px 20px; color:var(--navy-soft); font-family:'Manrope', sans-serif; font-size:0.92rem;}
+
+  /* Score row (scheda azienda) */
+  .score-row{display:flex; align-items:center; gap:10px; margin-bottom:12px;}
+  .score-badge{font-family:'Fraunces', serif; font-weight:600; font-size:0.86rem; padding:4px 11px; border-radius:8px; border:1px solid; line-height:1.3; flex:none;}
+  .score-label{font-family:'Manrope', sans-serif; font-size:0.82rem; color:var(--navy-soft); line-height:1.4;}
+
+  /* ---------- Value screening ---------- */
+  .value-banner{
+    background:var(--glass); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+    border:1px solid var(--glass-line); border-left:3px solid var(--gold); border-radius:var(--radius-m);
+    padding:18px 22px; margin-bottom:26px; font-family:'Manrope', sans-serif;
+    font-size:0.88rem; color:var(--navy-soft); line-height:1.6; box-shadow:var(--shadow-s);
+  }
+  .value-banner b{color:var(--deep);}
+  .value-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:16px;}
+  .value-card{
+    background:var(--glass); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+    border:1px solid var(--glass-line); border-radius:var(--radius-l);
+    box-shadow:var(--shadow-s); padding:22px 24px;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .value-card:hover{transform:translateY(-2px); box-shadow:var(--shadow-m);}
+  .value-top{display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:10px;}
+  .value-ticker-wrap{display:flex; align-items:center; gap:10px;}
+  .value-ticker{font-family:'Fraunces', serif; font-weight:600; font-size:0.94rem; color:var(--navy); cursor:pointer;}
+  .value-universe{font-family:'Manrope', sans-serif; font-size:0.72rem; color:var(--navy-soft);}
+  .signal-badge{font-family:'Manrope', sans-serif; font-weight:600; font-size:0.7rem; letter-spacing:0.02em; padding:4px 10px; border-radius:20px; border:1px solid var(--glass-line); white-space:nowrap;}
+  .signal-forte{color:var(--sage); border-color:rgba(78,140,99,0.4); background:rgba(78,140,99,0.08);}
+  .signal-moderato{color:var(--gold); border-color:rgba(184,147,61,0.4); background:rgba(184,147,61,0.1);}
+  .signal-debole{color:var(--navy-soft); border-color:var(--line);}
+  .value-name{font-family:'Fraunces', serif; font-weight:600; font-size:1.15rem; color:var(--deep); margin:0 0 13px;}
+  .value-metrics{list-style:none; margin:0 0 13px; padding:0; display:flex; flex-direction:column; gap:6px;}
+  .value-metrics li{font-family:'Manrope', sans-serif; font-size:0.84rem; color:var(--deep); padding-left:15px; position:relative; line-height:1.45;}
+  .value-metrics li::before{content:'—'; position:absolute; left:0; color:var(--gold);}
+  .value-reason{font-family:'Manrope', sans-serif; font-size:0.9rem; color:var(--navy-soft); line-height:1.6; margin-bottom:12px;}
+  .value-risk{font-family:'Manrope', sans-serif; font-size:0.84rem; color:var(--navy-soft); line-height:1.5; padding-top:12px; border-top:1px solid var(--line);}
+  .value-risk b{color:var(--navy);}
+
+  /* ---------- Footer ---------- */
+  .footer{position:relative; z-index:2; max-width:1120px; margin:0 auto; padding:0 26px 50px; font-family:'Manrope', sans-serif; font-size:0.78rem; color:var(--navy-soft); line-height:1.75; border-top:1px solid var(--line); padding-top:22px;}
+  .footer .reset-link{color:var(--navy-soft); text-decoration:underline; cursor:pointer; background:none; border:none; font-family:inherit; font-size:inherit; padding:0;}
+  .footer .reset-link:hover{color:var(--rust);}
+
+  @media (max-width:640px){
+    .masthead{margin:12px 12px 0; padding:18px 18px;}
+    .tabs{margin:10px 12px 0;}
+    .page{padding:24px 16px 60px;}
+    .news-item{grid-template-columns:1fr; gap:10px;}
+    .footer{padding:0 16px 40px; padding-top:20px;}
+    .watchlist-add{width:100%; margin-left:0;}
+    .watchlist-add input{flex:1; width:auto;}
+  }
+</style>
+
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+
+  <div class="tape-wrap" aria-hidden="true">
+    <div class="tape-track" id="tapeTrack"></div>
+  </div>
+
+  <header class="masthead">
+    <div>
+      <h1 class="masthead-title">DISPACCIO<span class="dot">.</span></h1>
+      <p class="masthead-sub">Notizie di mercato, selezionate ogni giorno</p>
+    </div>
+    <div class="masthead-right">
+      <div class="masthead-date">
+        <b id="todayLabel">—</b>
+        <span id="globalUpdatedLabel">Nessuna sezione aggiornata oggi</span>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Sezioni">
+    <button class="tab-btn" role="tab" id="tabbtn-news" aria-selected="true" aria-controls="view-news" data-view="news">Notizie</button>
+    <button class="tab-btn" role="tab" id="tabbtn-companies" aria-selected="false" aria-controls="view-companies" data-view="companies">Aziende</button>
+    <button class="tab-btn" role="tab" id="tabbtn-value" aria-selected="false" aria-controls="view-value" data-view="value">Valore</button>
+  </nav>
+
+  <main class="page">
+
+    <!-- ============ NEWS VIEW ============ -->
+    <section class="view active" id="view-news" role="tabpanel" aria-labelledby="tabbtn-news">
+      <h2 class="sr-only">Notizie</h2>
+
+      <div class="watchlist-box">
+        <h2>La tua watchlist</h2>
+        <div class="watchlist-row" id="watchlistRow">
+          <span class="empty-note" id="watchlistEmpty" style="padding:0;">Aggiungi un ticker per seguirlo con priorità (es. AAPL, ENI, NVDA).</span>
+          <div class="watchlist-add">
+            <label for="watchlistInput" class="sr-only">Aggiungi ticker alla watchlist</label>
+            <input type="text" id="watchlistInput" placeholder="TICKER" maxlength="8" aria-label="Aggiungi ticker alla watchlist">
+            <button class="btn btn-ghost" id="watchlistAddBtn">+ Aggiungi</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <label for="searchInput" class="sr-only">Cerca per azienda o ticker</label>
+        <input type="text" class="search-input" id="searchInput" placeholder="Cerca tra le notizie già caricate…" aria-label="Cerca per azienda o ticker">
+        <button class="btn btn-ghost" id="refreshAllBtn">Aggiorna tutto (una sezione alla volta)</button>
+      </div>
+
+      <div id="newsSectionsRoot"></div>
+
+    </section>
+
+    <!-- ============ COMPANIES VIEW ============ -->
+    <section class="view" id="view-companies" role="tabpanel" aria-labelledby="tabbtn-companies">
+      <h2 class="sr-only">Aziende</h2>
+      <div class="company-search">
+        <label for="companySearchInput" class="sr-only">Cerca un'azienda per nome o ticker</label>
+        <input type="text" id="companySearchInput" placeholder="Cerca un'azienda per nome o ticker (es. Microsoft, MSFT, Ferrari)…" aria-label="Cerca un'azienda per nome o ticker">
+        <button class="btn" id="companySearchBtn">Cerca</button>
+      </div>
+      <div class="company-hint">Le schede vengono generate al primo utilizzo e salvate qui per la prossima volta. Il punteggio (0-100) riflette la salute finanziaria in base a dati oggettivi — non è un consiglio di investimento.</div>
+      <div id="companyStatus" class="status-line" style="display:none;" aria-live="polite"></div>
+      <div class="company-grid" id="companyGrid"></div>
+      <div class="company-empty" id="companyEmpty">Non hai ancora consultato nessuna azienda. Cercane una qui sopra, oppure tocca un ticker in una notizia.</div>
+    </section>
+
+    <!-- ============ VALUE SCREENING VIEW ============ -->
+    <section class="view" id="view-value" role="tabpanel" aria-labelledby="tabbtn-value">
+      <h2 class="sr-only">Valore</h2>
+
+      <div class="value-banner">
+        <b>Screening basato su dati oggettivi</b> — multipli di valutazione (P/E, EV/EBITDA, P/B), confronto con la media storica e con i competitor, target price degli analisti e contesto macro del settore. Non è un consiglio di acquisto: uno sconto ha quasi sempre un motivo, leggi sempre la voce "da considerare" e verifica con un consulente finanziario prima di decidere.
+      </div>
+
+      <div class="controls">
+        <div class="chip-row" id="universeChipsValue" role="group" aria-label="Filtra per indice"></div>
+        <button class="btn" id="refreshValueBtn">Aggiorna screening</button>
+      </div>
+
+      <div class="status-line" id="valueStatusLine" aria-live="polite">Premi "Aggiorna screening" per cercare titoli potenzialmente sottovalutati.</div>
+
+      <div id="valueContainer"></div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div>Le notizie e le analisi sono generate da un'intelligenza artificiale tramite ricerca web e possono contenere imprecisioni o omissioni. Non costituiscono consulenza finanziaria: verifica sempre le informazioni rilevanti su fonti primarie prima di prendere decisioni. — <button class="reset-link" id="resetBtn">Cancella watchlist e schede salvate</button></div>
+  </footer>
+
+<script>
+(function(){
+
+  // ---------------- Config ----------------
+  const MODEL = "claude-sonnet-4-6";
+
+  const UNIVERSES = [
+    { key: 'sp500', label: 'S&P 500' },
+    { key: 'nasdaq100', label: 'Nasdaq 100' },
+    { key: 'ftsemib', label: 'FTSE MIB' },
+    { key: 'smallcap', label: 'Small cap' },
+  ];
+
+  const NEWS_UNIVERSES = [
+    { key: 'sp500', label: 'S&P 500', focus: "societa incluse nell'indice S&P 500" },
+    { key: 'nasdaq100', label: 'Nasdaq 100', focus: "societa incluse nell'indice Nasdaq 100" },
+    { key: 'ftsemib', label: 'FTSE MIB', focus: "societa incluse nell'indice FTSE MIB" },
+    { key: 'smallcap', label: 'Small cap', focus: "small cap quotate e promettenti" },
+  ];
+
+  // ---------------- State ----------------
+  let state = {
+    activeUniverses: new Set(UNIVERSES.map(u => u.key)),
+    watchlist: [],
+    newsSections: { watchlist: [], sp500: [], nasdaq100: [], ftsemib: [], smallcap: [] },
+    sectionMeta: {}, // key -> { fetchedAt, loading }
+    searchTerm: '',
+    companies: {},       // ticker -> profile object, loaded from storage
+  };
+  NEWS_UNIVERSES.forEach(u => { state.sectionMeta[u.key] = { fetchedAt: null, loading: false }; });
+  state.sectionMeta.watchlist = { fetchedAt: null, loading: false };
+
+  const todayKey = () => new Date().toISOString().slice(0,10);
+  const newsSectionKey = (key) => 'newssec:' + todayKey() + ':' + key;
+
+  // ---------------- Storage helpers (localStorage) ----------------
+  async function storeGet(key){
+    try{ const v = localStorage.getItem(key); return v === null ? null : v; }catch(e){ return null; }
+  }
+  async function storeSet(key, value){
+    try{ localStorage.setItem(key, value); return true; }catch(e){ console.error('storage set failed', key, e); return false; }
+  }
+  async function storeDelete(key){
+    try{ localStorage.removeItem(key); }catch(e){}
+  }
+  async function storeList(prefix){
+    try{ const keys=[]; for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i); if(k && k.indexOf(prefix)===0) keys.push(k);} return keys; }catch(e){ return []; }
+  }
+
+  // ---------------- Chiamata al server (chiave nascosta) ----------------
+  const ENV_ERROR_MSG = "Impossibile contattare il server. Controlla la connessione, oppure verifica che ANTHROPIC_API_KEY sia configurata su Vercel.";
+
+  function extractPartialItems(raw){
+    const keyIdx = raw.indexOf('"items"');
+    if(keyIdx === -1) return null;
+    const bracketIdx = raw.indexOf('[', keyIdx);
+    if(bracketIdx === -1) return null;
+    const items = [];
+    let i = bracketIdx + 1;
+    while(i < raw.length){
+      while(i < raw.length && /[\s,]/.test(raw[i])) i++;
+      if(raw[i] === ']' || i >= raw.length) break;
+      if(raw[i] !== '{') break;
+      let depth = 0, inStr = false, esc = false;
+      const start2 = i; let j = i;
+      for(; j < raw.length; j++){
+        const c = raw[j];
+        if(inStr){ if(esc) esc=false; else if(c==='\\') esc=true; else if(c==='"') inStr=false; }
+        else { if(c==='"') inStr=true; else if(c==='{') depth++; else if(c==='}'){ depth--; if(depth===0){ j++; break; } } }
+      }
+      if(depth !== 0) break;
+      try{ items.push(JSON.parse(raw.slice(start2, j))); }catch(e){ }
+      i = j;
+    }
+    return items.length ? { items } : null;
+  }
+
+  const wait = (ms) => new Promise(r => setTimeout(r, ms));
+
+  async function callClaude(system, userText, attempt){
+    attempt = attempt || 0;
+    let response;
+    try{
+      response = await fetch('/api/claude', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ system, userText }) });
+    }catch(networkErr){ console.error('network error', networkErr); throw new Error(ENV_ERROR_MSG); }
+    if(response.status === 429 && attempt < 3){ await wait(1500 * Math.pow(2, attempt)); return callClaude(system, userText, attempt + 1); }
+    const data = await response.json();
+    if(!response.ok){ throw new Error(response.status === 429 ? "Troppe richieste in poco tempo. Riprova tra qualche secondo." : (data.error || ("Richiesta fallita (" + response.status + ")"))); }
+    if(!data.content) throw new Error("Risposta vuota");
+    const textBlocks = data.content.filter(b => b.type === "text").map(b => b.text);
+    let raw = textBlocks.length ? textBlocks[textBlocks.length - 1] : '';
+    raw = raw.trim().replace(/^```json/i, '').replace(/^```/,'').replace(/```$/,'').trim();
+    try{ return JSON.parse(raw); }
+    catch(e){
+      const match = raw.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
+      if(match){ try{ return JSON.parse(match[0]); }catch(e2){ } }
+      const partial = extractPartialItems(raw);
+      if(partial) return partial;
+      console.error('Risposta non parsabile:', raw);
+      throw new Error("Formato risposta non valido");
+    }
+  }
+
+  // ---------------- Fetching news (una ricerca indipendente per indice) ----------------
+  async function fetchIndexNews(u){
+    const system = "Sei un motore di ricerca di notizie finanziarie. Usa lo strumento di ricerca web per trovare notizie reali e recenti (ultime 24-72 ore) su " + u.focus + ". Copri piu categorie possibili tra: utili/risultati trimestrali, M&A e trattative, previsioni o revisioni degli analisti, nuovi prodotti o partnership, regolamentazione e contesto macro. Per ogni notizia valuta anche un impact score da 0 a 100 che misura QUANTO la notizia puo incidere sul prezzo del titolo, considerando: rilevanza per l'azienda, possibile impatto sugli utili, durata attesa dell'effetto, e conferma da piu fonti indipendenti. Il punteggio misura l'intensita dell'impatto, non se e positivo o negativo. Valuta inoltre una stabilita da 0 a 100 che riflette la solidita finanziaria dell'azienda in base a dati oggettivi (0 = azienda nei guai, 100 = azienda solida). Rispondi ESCLUSIVAMENTE con un oggetto JSON valido, senza alcun testo introduttivo, spiegazione o blocco markdown attorno. Formato esatto richiesto: {\"items\":[{\"ticker\":\"...\",\"azienda\":\"...\",\"categoria\":\"Earnings\"|\"M&A\"|\"Analisti\"|\"Prodotti\"|\"Regolamentazione\",\"titolo\":\"...\",\"analisi\":\"massimo 30 parole, spiega perche conta\",\"sentiment\":\"positivo\"|\"negativo\"|\"neutro\",\"impact\":numero 0-100,\"impact_nota\":\"massimo 18 parole: perche questo impatto, con riferimento a utili/durata/rilevanza/conferma fonti\",\"stabilita\":numero 0-100,\"fonte\":\"nome testata se nota, altrimenti generico\"}]}. Includi al massimo 6 notizie verificabili e realmente accadute, variando le categorie quando possibile. Se non trovi notizie affidabili, restituisci {\"items\":[]}. Non inventare fatti o numeri.";
+    const userText = "Data odierna: " + new Date().toLocaleDateString('it-IT', { year:'numeric', month:'long', day:'numeric' }) + ".";
+    const parsed = await callClaude(system, userText);
+    return Array.isArray(parsed.items) ? parsed.items : [];
+  }
+
+  async function fetchWatchlistNews(tickers){
+    if(!tickers.length) return [];
+    const system = "Sei un motore di ricerca di notizie finanziarie. Usa lo strumento di ricerca web per trovare le notizie piu rilevanti e recenti (ultime 48-72 ore) per i ticker indicati. Per ogni notizia valuta anche un impact score da 0 a 100 che misura QUANTO la notizia puo incidere sul prezzo del titolo, considerando: rilevanza per l'azienda, possibile impatto sugli utili, durata attesa dell'effetto, e conferma da piu fonti indipendenti. Il punteggio misura l'intensita dell'impatto, non se e positivo o negativo. Valuta inoltre una stabilita da 0 a 100 che riflette la solidita finanziaria dell'azienda in base a dati oggettivi (0 = azienda nei guai, 100 = azienda solida). Rispondi ESCLUSIVAMENTE con un oggetto JSON valido nel formato: {\"items\":[{\"ticker\":\"...\",\"azienda\":\"...\",\"titolo\":\"...\",\"analisi\":\"massimo 30 parole\",\"sentiment\":\"positivo\"|\"negativo\"|\"neutro\",\"impact\":numero 0-100,\"impact_nota\":\"massimo 18 parole: perche questo impatto\",\"stabilita\":numero 0-100,\"fonte\":\"...\"}]}. Se per un ticker non trovi notizie recenti affidabili, ometti quel ticker. Non inventare fatti.";
+    const userText = "Trova le notizie piu importanti delle ultime 48-72 ore per questi ticker: " + tickers.join(', ') + ".";
+    const parsed = await callClaude(system, userText);
+    return Array.isArray(parsed.items) ? parsed.items : [];
+  }
+
+  // ---------------- Rendering: news ----------------
+  // Punteggio 0-100 -> fascia e colore (stabilita/salute finanziaria; stesse fasce dell'impact)
+  function scoreMeta(score){
+    if(typeof score !== 'number' || isNaN(score)) return null;
+    const s = Math.max(0, Math.min(100, Math.round(score)));
+    if(s >= 70) return { value:s, cls:'impact-verde', label:'Solida' };
+    if(s >= 50) return { value:s, cls:'impact-giallo', label:'Nella norma' };
+    if(s >= 30) return { value:s, cls:'impact-rosso', label:'Fragile' };
+    return { value:s, cls:'impact-bianco', label:'Nei guai' };
+  }
+
+  // Impact score 0-100 -> fascia e colore (misura l'intensita dell'impatto sul prezzo)
+  function impactMeta(score){
+    if(typeof score !== 'number' || isNaN(score)) return null;
+    const s = Math.max(0, Math.min(100, Math.round(score)));
+    if(s >= 70) return { value:s, cls:'impact-verde', label:'Alto impatto' };
+    if(s >= 50) return { value:s, cls:'impact-giallo', label:'Impatto medio' };
+    if(s >= 30) return { value:s, cls:'impact-rosso', label:'Impatto contenuto' };
+    return { value:s, cls:'impact-bianco', label:'Impatto minimo' };
+  }
+
+  function sentimentMeta(s){
+    if(s === 'positivo') return { symbol:'▲', cls:'sent-positivo', word:'notizia positiva' };
+    if(s === 'negativo') return { symbol:'▼', cls:'sent-negativo', word:'notizia negativa' };
+    return { symbol:'●', cls:'sent-neutro', word:'notizia neutra' };
+  }
+
+  function newsMatchesSearch(item){
+    if(!state.searchTerm) return true;
+    const t = state.searchTerm.toLowerCase();
+    const hay = ((item.azienda||'') + ' ' + (item.ticker||'') + ' ' + (item.titolo||'')).toLowerCase();
+    return hay.includes(t);
+  }
+
+  function renderNewsItem(item){
+    const div = document.createElement('div');
+    div.className = 'news-item';
+    const ticker = (item.ticker||'—').toUpperCase();
+    const sm = sentimentMeta(item.sentiment);
+    const tag = (item.azienda||'') + (item.categoria ? ' · ' + item.categoria : '');
+    const cachedCompany = state.companies[ticker];
+    const stabilityValue = (typeof item.stabilita === 'number') ? item.stabilita
+                          : (cachedCompany ? cachedCompany.punteggio : undefined);
+    const sc = scoreMeta(stabilityValue);
+    const im = impactMeta(item.impact);
+    div.innerHTML =
+      '<div class="news-ticker-col"><button type="button" class="ticker-badge" data-ticker="' + ticker.replace(/"/g,'') + '">' +
+        '<span class="sentiment-mark ' + sm.cls + '" aria-hidden="true">' + sm.symbol + '</span>' + ticker +
+        '<span class="sr-only"> — ' + sm.word + ', vedi scheda azienda</span>' +
+      '</button>' +
+      (sc ? '<span class="stability-badge ' + sc.cls + '" title="Stabilità azienda: ' + sc.value + '/100 — ' + sc.label + '">' + sc.value + '</span>' : '') +
+      '</div>' +
+      '<div class="news-body">' +
+        '<span class="universe-tag">' + tag + '</span>' +
+        '<div class="news-title-row">' +
+          '<div class="news-title">' + (item.titolo||'') + '</div>' +
+          (im ? '<span class="impact-badge ' + im.cls + '" title="Impact score: ' + im.value + '/100 — ' + im.label + '">' + im.value + '</span>' : '') +
+        '</div>' +
+        '<div class="news-analysis">' + (item.analisi||'') + '</div>' +
+        (im && item.impact_nota ? '<div class="impact-note"><span class="impact-note-label">Impatto ' + im.value + '/100</span> · ' + item.impact_nota + '</div>' : '') +
+        (item.fonte ? '<div class="news-source">' + item.fonte + '</div>' : '') +
+      '</div>';
+    div.querySelector('.ticker-badge').addEventListener('click', () => {
+      switchView('companies');
+      document.getElementById('companySearchInput').value = ticker;
+      lookupCompany(ticker);
+    });
+    return div;
+  }
+
+  function renderSectionItems(key){
+    const body = document.getElementById('body-' + key);
+    if(!body) return;
+    const items = state.newsSections[key] || [];
+    const filtered = items.filter(newsMatchesSearch);
+    if(!filtered.length){
+      body.innerHTML = '<div class="empty-note">' + (items.length ? 'Nessuna notizia corrisponde alla ricerca.' : 'Nessuna notizia cercata ancora. Premi "Cerca".') + '</div>';
+      return;
+    }
+    body.innerHTML = '';
+    filtered.forEach(item => body.appendChild(renderNewsItem(item)));
+  }
+
+  function renderSectionSkeleton(key){
+    const body = document.getElementById('body-' + key);
+    if(!body) return;
+    body.innerHTML =
+      '<div class="skeleton-line" style="width:70%;"></div>' +
+      '<div class="skeleton-line" style="width:90%;"></div>' +
+      '<div class="skeleton-line" style="width:55%;"></div>';
+  }
+
+  function renderSectionError(key, message){
+    const body = document.getElementById('body-' + key);
+    if(!body) return;
+    body.innerHTML = '<div class="error-note">' + (message || 'Ricerca non riuscita. Riprova.') + '</div>';
+  }
+
+  function setSectionStatus(key, text){
+    const el = document.getElementById('status-' + key);
+    if(el) el.textContent = text;
+  }
+
+  function buildNewsSectionsLayout(){
+    const root = document.getElementById('newsSectionsRoot');
+    root.innerHTML = '';
+    const defs = [{ key:'watchlist', label:'La tua watchlist' }].concat(
+      NEWS_UNIVERSES.map(u => ({ key:u.key, label:u.label }))
+    );
+    defs.forEach(d => {
+      if(d.key === 'watchlist' && !state.watchlist.length) return; // niente sezione notizie watchlist se vuota
+      const section = document.createElement('div');
+      section.className = 'category-section';
+      section.id = 'newssec-' + d.key;
+      section.innerHTML =
+        '<div class="news-section-head">' +
+          '<h3 class="category-eyebrow">' + d.label + '</h3>' +
+          '<button type="button" class="btn btn-ghost btn-small" data-newskey="' + d.key + '">Cerca</button>' +
+        '</div>' +
+        '<div class="section-status" id="status-' + d.key + '">Non ancora cercato.</div>' +
+        '<div class="cat-body" id="body-' + d.key + '"></div>';
+      root.appendChild(section);
+      root.querySelector('#newssec-' + d.key + ' [data-newskey]').addEventListener('click', () => refreshSection(d.key));
+      renderSectionItems(d.key); // mostra eventuale cache gia in state
+    });
+  }
+
+  function setAllNewsButtonsDisabled(disabled){
+    document.querySelectorAll('#newsSectionsRoot [data-newskey]').forEach(b => b.disabled = disabled);
+    const allBtn = document.getElementById('refreshAllBtn');
+    if(allBtn) allBtn.disabled = disabled;
+  }
+
+  // ---------------- Refresh flow (una sezione alla volta, mai in contemporanea) ----------------
+  let newsBusy = false;
+
+  function updateGlobalUpdatedLabel(){
+    const el = document.getElementById('globalUpdatedLabel');
+    if(!el) return;
+    let latest = null;
+    Object.keys(state.sectionMeta).forEach(k => {
+      const t = state.sectionMeta[k] && state.sectionMeta[k].fetchedAt;
+      if(t && (!latest || new Date(t) > new Date(latest))) latest = t;
+    });
+    if(!latest){
+      el.textContent = 'Nessuna sezione aggiornata oggi';
+    }else{
+      el.textContent = 'Ultimo aggiornamento: ' + new Date(latest).toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'});
+    }
+  }
+
+  async function refreshSection(key, progress){
+    if(newsBusy) return;
+    newsBusy = true;
+    setAllNewsButtonsDisabled(true);
+    const btn = document.querySelector('#newssec-' + key + ' [data-newskey]');
+    const busyLabel = progress ? ('Ricerca… (' + progress.current + ' di ' + progress.total + ')') : 'Ricerca…';
+    if(btn) btn.textContent = busyLabel;
+    setSectionStatus(key, 'Sto cercando...');
+    renderSectionSkeleton(key);
+
+    try{
+      const items = key === 'watchlist'
+        ? await fetchWatchlistNews(state.watchlist)
+        : await fetchIndexNews(NEWS_UNIVERSES.find(u => u.key === key));
+      state.newsSections[key] = items;
+      renderSectionItems(key);
+      const now = new Date().toISOString();
+      state.sectionMeta[key].fetchedAt = now;
+      await storeSet(newsSectionKey(key), JSON.stringify({ items, fetchedAt: now }));
+      setSectionStatus(key, items.length
+        ? ('Aggiornato alle ' + new Date(now).toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'}))
+        : 'Nessuna notizia trovata al momento.');
+      updateTape();
+      updateGlobalUpdatedLabel();
+    }catch(err){
+      console.error(key, err);
+      renderSectionError(key, err.message);
+      setSectionStatus(key, 'Ricerca non riuscita.');
+    }
+
+    if(btn) btn.textContent = 'Cerca';
+    setAllNewsButtonsDisabled(false);
+    newsBusy = false;
+  }
+
+  async function refreshAllSequential(){
+    if(newsBusy) return;
+    const order = (state.watchlist.length ? ['watchlist'] : []).concat(NEWS_UNIVERSES.map(u => u.key));
+    const total = order.length;
+    const allBtn = document.getElementById('refreshAllBtn');
+    for(let idx = 0; idx < order.length; idx++){
+      if(allBtn) allBtn.textContent = 'Aggiornamento ' + (idx + 1) + ' di ' + total + '…';
+      await refreshSection(order[idx], { current: idx + 1, total: total }); // mai due ricerche insieme
+    }
+    if(allBtn) allBtn.textContent = 'Aggiorna tutto (una sezione alla volta)';
+  }
+
+  // ---------------- Ticker tape ----------------
+  function updateTape(){
+    const track = document.getElementById('tapeTrack');
+    let items = [];
+    Object.values(state.newsSections).forEach(arr => items = items.concat(arr || []));
+    if(!items.length){
+      const placeholder = '<span class="tape-item">In attesa del primo aggiornamento del giorno…</span>';
+      track.innerHTML = placeholder + placeholder;
+      return;
+    }
+    const frag = items.map(it => {
+      const sm = sentimentMeta(it.sentiment);
+      return '<span class="tape-item"><span class="sentiment-mark ' + sm.cls + '">' + sm.symbol + '</span><span class="tk">' + (it.ticker||'').toUpperCase() + '</span>' + (it.titolo||'').slice(0,60) + '</span>';
+    }).join('');
+    track.innerHTML = frag + frag; // duplicate for seamless loop
+  }
+
+  // ---------------- Watchlist ----------------
+  function renderWatchlist(){
+    const row = document.getElementById('watchlistRow');
+    const emptyNote = document.getElementById('watchlistEmpty');
+    row.querySelectorAll('.watchlist-tag').forEach(el => el.remove());
+    emptyNote.style.display = state.watchlist.length ? 'none' : 'inline';
+    state.watchlist.forEach(tk => {
+      const tag = document.createElement('span');
+      tag.className = 'watchlist-tag';
+      tag.innerHTML = tk + ' <button type="button" aria-label="Rimuovi ' + tk + ' dalla watchlist">×</button>';
+      tag.querySelector('button').addEventListener('click', () => removeFromWatchlist(tk));
+      row.insertBefore(tag, emptyNote);
+    });
+    buildNewsSectionsLayout();
+  }
+
+  async function saveWatchlist(){
+    await storeSet('watchlist', JSON.stringify(state.watchlist));
+  }
+
+  async function addToWatchlist(){
+    const input = document.getElementById('watchlistInput');
+    const val = input.value.trim().toUpperCase();
+    if(!val) return;
+    if(!state.watchlist.includes(val)){
+      state.watchlist.push(val);
+      renderWatchlist();
+      await saveWatchlist();
+    }
+    input.value = '';
+  }
+
+  async function removeFromWatchlist(tk){
+    state.watchlist = state.watchlist.filter(t => t !== tk);
+    renderWatchlist();
+    await saveWatchlist();
+  }
+
+  // ---------------- Universe chips ----------------
+  function renderChipsInto(containerId){
+    const wrap = document.getElementById(containerId);
+    if(!wrap) return;
+    wrap.innerHTML = '';
+    UNIVERSES.forEach(u => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chip';
+      chip.setAttribute('aria-pressed', state.activeUniverses.has(u.key) ? 'true' : 'false');
+      chip.textContent = u.label;
+      chip.addEventListener('click', () => {
+        if(state.activeUniverses.has(u.key)) state.activeUniverses.delete(u.key);
+        else state.activeUniverses.add(u.key);
+        renderUniverseChips();
+        rerenderValueFromState();
+      });
+      wrap.appendChild(chip);
+    });
+  }
+  function renderUniverseChips(){
+    renderChipsInto('universeChipsValue');
+  }
+
+  // ---------------- Companies ----------------
+  function companyCardEl(profile){
+    const card = document.createElement('div');
+    card.className = 'company-card';
+    const sc = scoreMeta(profile.punteggio);
+    card.innerHTML =
+      '<div class="company-top">' +
+        '<span class="company-ticker">' + profile.ticker + '</span>' +
+        '<span class="company-sector">' + (profile.settore||'') + '</span>' +
+      '</div>' +
+      '<h3 class="company-name">' + (profile.nome||profile.ticker) + '</h3>' +
+      (sc ? '<div class="score-row"><span class="score-badge ' + sc.cls + '">' + sc.value + '</span><span class="score-label">' + sc.label + (profile.punteggio_nota ? ' — ' + profile.punteggio_nota : '') + '</span></div>' : '') +
+      '<div class="company-desc">' + (profile.descrizione||'') + '</div>' +
+      '<div class="company-meta">' + (profile.borsa||'') + (profile.updated ? ' · aggiornato ' + new Date(profile.updated).toLocaleDateString('it-IT') : '') + '</div>';
+    return card;
+  }
+
+  function renderCompanyGrid(){
+    const grid = document.getElementById('companyGrid');
+    const emptyMsg = document.getElementById('companyEmpty');
+    const list = Object.values(state.companies).sort((a,b) => (a.ticker||'').localeCompare(b.ticker||''));
+    grid.innerHTML = '';
+    emptyMsg.style.display = list.length ? 'none' : 'block';
+    list.forEach(p => grid.appendChild(companyCardEl(p)));
+  }
+
+  async function loadSavedCompanies(){
+    const keys = await storeList('company:');
+    for(const k of keys){
+      const raw = await storeGet(k);
+      if(raw){
+        try{
+          const profile = JSON.parse(raw);
+          state.companies[profile.ticker] = profile;
+        }catch(e){}
+      }
+    }
+    renderCompanyGrid();
+  }
+
+  async function lookupCompany(query){
+    const clean = query.trim();
+    if(!clean) return;
+    const statusEl = document.getElementById('companyStatus');
+    const upper = clean.toUpperCase();
+
+    // Se in cache ed entro i 20 giorni, mostra subito; altrimenti rigenera (dati piu freschi)
+    const cached = state.companies[upper];
+    if(cached){
+      const ageMs = cached.updated ? (Date.now() - new Date(cached.updated).getTime()) : Infinity;
+      const twentyDaysMs = 20 * 24 * 60 * 60 * 1000;
+      if(ageMs < twentyDaysMs){
+        renderCompanyGrid();
+        statusEl.style.display = 'none';
+        return;
+      }
+      // scaduta: prosegue e rigenera, aggiornando la scheda esistente
+    }
+
+    statusEl.style.display = 'block';
+    statusEl.textContent = 'Sto cercando informazioni su "' + clean + '"…';
+
+    const system = "Sei un assistente che redige schede aziendali sintetiche per un investitore non esperto, e assegna un punteggio di salute finanziaria assolutamente oggettivo. Usa la ricerca web per verificare informazioni aggiornate su nome ufficiale, settore, borsa di quotazione, attivita dell'azienda e dati finanziari reali (andamento di ricavi/utili, margini, livello di debito, valutazione attuale rispetto a media storica e competitor, consenso degli analisti). Rispondi ESCLUSIVAMENTE con un oggetto JSON valido, senza testo introduttivo ne blocchi markdown, nel formato: {\"ticker\":\"...\",\"nome\":\"...\",\"settore\":\"...\",\"borsa\":\"...\",\"descrizione\":\"80-120 parole: cosa fa l'azienda, prodotti o servizi principali, posizionamento competitivo\",\"punteggio\":numero da 0 a 100 basato solo su dati oggettivi verificabili,\"punteggio_nota\":\"max 12 parole sul perche di questo punteggio\"}. Il punteggio riflette la salute finanziaria e il posizionamento attuale, non e un consiglio di investimento ne una previsione. Se non trovi dati finanziari sufficienti per un punteggio affidabile, ometti i campi punteggio e punteggio_nota piuttosto che inventarli. Se l'azienda non viene trovata con certezza, fai la scelta piu plausibile e restituisci comunque il JSON.";
+    const userText = "Fornisci la scheda per questa azienda o ticker: " + clean + ".";
+
+    try{
+      const profile = await callClaude(system, userText);
+      if(!profile.ticker) profile.ticker = upper;
+      profile.ticker = profile.ticker.toUpperCase();
+      profile.updated = new Date().toISOString();
+      state.companies[profile.ticker] = profile;
+      await storeSet('company:' + profile.ticker, JSON.stringify(profile));
+      renderCompanyGrid();
+      Object.keys(state.newsSections).forEach(key => renderSectionItems(key)); // aggiorna i badge punteggio già visibili
+      statusEl.style.display = 'none';
+    }catch(err){
+      console.error(err);
+      statusEl.textContent = err.message.indexOf('claude.ai') !== -1
+        ? err.message
+        : 'Non sono riuscito a trovare informazioni affidabili su "' + clean + '". Riprova o verifica il nome/ticker.';
+    }
+  }
+
+  // ---------------- Tabs / views ----------------
+  function switchView(view){
+    document.querySelectorAll('.tab-btn').forEach(b => b.setAttribute('aria-selected', b.dataset.view === view ? 'true' : 'false'));
+    document.getElementById('view-news').classList.toggle('active', view === 'news');
+    document.getElementById('view-companies').classList.toggle('active', view === 'companies');
+    document.getElementById('view-value').classList.toggle('active', view === 'value');
+  }
+
+  // ---------------- Value screening ----------------
+  const VALUE_SCOPES = [
+    { key: 'sp500', label: 'S&P 500', universo: 'S&P 500',
+      desc: 'Analizza societa incluse nell\'indice S&P 500.' },
+    { key: 'nasdaq100', label: 'Nasdaq 100', universo: 'Nasdaq 100',
+      desc: 'Analizza societa incluse nell\'indice Nasdaq 100.' },
+    { key: 'ftsemib', label: 'FTSE MIB', universo: 'FTSE MIB',
+      desc: 'Analizza societa incluse nell\'indice FTSE MIB.' },
+    { key: 'smallcap', label: 'Small cap', universo: 'Small cap',
+      desc: 'Analizza small cap quotate e promettenti, con dati finanziari pubblici verificabili.' },
+  ];
+
+  const valueDigestStorageKey = () => 'valuescreen:' + todayKey();
+  let valueState = { items: [], fetchedAt: null };
+
+  async function fetchValueScope(scope){
+    const system = "Sei un analista finanziario quantitativo e assolutamente oggettivo. Usa la ricerca web per trovare dati reali e verificabili (multipli di valutazione attuali, medie storiche, dati dei competitor, target price degli analisti, contesto macro di settore). Individua titoli che, sulla base di questi dati oggettivi, sembrano trattare a sconto rispetto al loro valore effettivo. Non esprimere mai un giudizio di 'comprare' o 'vendere': limitati a riportare i dati e cosa suggeriscono. Per ogni titolo indica anche onestamente i motivi per cui il mercato potrebbe valutarlo cosi. Sii conciso: usa poche ricerche mirate e rispondi subito dopo. Rispondi ESCLUSIVAMENTE con un oggetto JSON valido, senza testo introduttivo ne blocchi markdown, nel formato: {\"items\":[{\"ticker\":\"...\",\"azienda\":\"...\",\"universo\":\"S&P 500\"|\"Nasdaq 100\"|\"FTSE MIB\"|\"Small cap\",\"metriche\":[\"max 3 stringhe brevi tipo 'P/E 12x vs media storica 18x'\"],\"motivazione\":\"max 20 parole\",\"rischi\":\"max 15 parole\",\"segnali\":\"forte\"|\"moderato\"|\"debole\"}]}. Includi al massimo 3 titoli, tutti reali e verificabili. Se non trovi candidati solidi, restituisci {\"items\":[]}. Non inventare numeri: se non trovi un dato preciso, ometti quella metrica.";
+    const userText = scope.desc + " Includi al massimo 2 titoli. Data odierna: " + new Date().toLocaleDateString('it-IT', { year:'numeric', month:'long', day:'numeric' }) + ".";
+    const parsed = await callClaude(system, userText);
+    return Array.isArray(parsed.items) ? parsed.items : [];
+  }
+
+  function valueItemMatchesFilters(item){
+    const u = (item.universo||'').toLowerCase();
+    let key = null;
+    if(u.includes('s&p')) key = 'sp500';
+    else if(u.includes('nasdaq')) key = 'nasdaq100';
+    else if(u.includes('ftse')) key = 'ftsemib';
+    else if(u.includes('small')) key = 'smallcap';
+    if(key && !state.activeUniverses.has(key)) return false;
+    return true;
+  }
+
+  function signalBadgeClass(s){
+    if(s === 'forte') return 'signal-forte';
+    if(s === 'moderato') return 'signal-moderato';
+    return 'signal-debole';
+  }
+
+  function valueCardEl(item){
+    const card = document.createElement('div');
+    card.className = 'value-card';
+    const metrics = Array.isArray(item.metriche) ? item.metriche : [];
+    card.innerHTML =
+      '<div class="value-top">' +
+        '<div class="value-ticker-wrap">' +
+          '<span class="value-ticker">' + (item.ticker||'').toUpperCase() + '</span>' +
+          '<span class="value-universe">' + (item.universo||'') + '</span>' +
+        '</div>' +
+        '<span class="signal-badge ' + signalBadgeClass(item.segnali) + '">Segnali ' + (item.segnali||'debole') + '</span>' +
+      '</div>' +
+      '<h3 class="value-name">' + (item.azienda||item.ticker||'') + '</h3>' +
+      (metrics.length ? '<ul class="value-metrics">' + metrics.map(m => '<li>' + m + '</li>').join('') + '</ul>' : '') +
+      '<div class="value-reason">' + (item.motivazione||'') + '</div>' +
+      (item.rischi ? '<div class="value-risk"><b>Da considerare:</b> ' + item.rischi + '</div>' : '');
+    card.querySelector('.value-ticker').addEventListener('click', () => {
+      switchView('companies');
+      document.getElementById('companySearchInput').value = (item.ticker||'').toUpperCase();
+      lookupCompany(item.ticker||'');
+    });
+    card.querySelector('.value-ticker').style.cursor = 'pointer';
+    return card;
+  }
+
+  function rerenderValueFromState(){
+    const container = document.getElementById('valueContainer');
+    if(!container || !valueState.items.length) return;
+    const filtered = valueState.items.filter(valueItemMatchesFilters);
+    container.innerHTML = '';
+    if(!filtered.length){
+      container.innerHTML = '<div class="empty-note">Nessun titolo corrisponde ai filtri attuali.</div>';
+      return;
+    }
+    const grid = document.createElement('div');
+    grid.className = 'value-grid';
+    filtered.forEach(item => grid.appendChild(valueCardEl(item)));
+    container.appendChild(grid);
+  }
+
+  let isRefreshingValue = false;
+  async function refreshValueScreen(){
+    if(isRefreshingValue) return;
+    isRefreshingValue = true;
+    const btn = document.getElementById('refreshValueBtn');
+    btn.disabled = true;
+    btn.textContent = 'Analisi in corso…';
+    document.getElementById('valueStatusLine').textContent = 'Sto analizzando multipli di valutazione, medie storiche e target price su tutti gli indici…';
+    document.getElementById('valueContainer').innerHTML =
+      '<div class="skeleton-line" style="width:60%;"></div><div class="skeleton-line" style="width:85%;"></div><div class="skeleton-line" style="width:50%;"></div>';
+
+    let items = [];
+    let lastError = null;
+    const results = await Promise.allSettled(
+      VALUE_SCOPES.map((scope, idx) => wait(idx * 700).then(() => fetchValueScope(scope)))
+    );
+    results.forEach(r => {
+      if(r.status === 'fulfilled') items = items.concat(r.value);
+      else lastError = r.reason;
+    });
+
+    valueState = { items, fetchedAt: new Date().toISOString() };
+    await storeSet(valueDigestStorageKey(), JSON.stringify(valueState));
+
+    rerenderValueFromState();
+    if(items.length){
+      document.getElementById('valueStatusLine').textContent = 'Aggiornato alle ' + new Date(valueState.fetchedAt).toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'}) + '.';
+    }else if(lastError){
+      document.getElementById('valueContainer').innerHTML = '<div class="error-note">' + lastError.message + '</div>';
+      document.getElementById('valueStatusLine').textContent = 'Analisi non riuscita.';
+    }else{
+      document.getElementById('valueStatusLine').textContent = 'Nessun candidato solido trovato al momento. Riprova piu tardi.';
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Aggiorna screening';
+    isRefreshingValue = false;
+  }
+
+  // ---------------- Init ----------------
+  async function init(){
+    document.getElementById('todayLabel').textContent =
+      new Date().toLocaleDateString('it-IT', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+    renderUniverseChips();
+
+    // Load watchlist
+    const wlRaw = await storeGet('watchlist');
+    if(wlRaw){
+      try{ state.watchlist = JSON.parse(wlRaw); }catch(e){ state.watchlist = []; }
+    }
+    renderWatchlist(); // costruisce anche il layout delle sezioni notizie
+
+    // Load saved companies
+    await loadSavedCompanies();
+
+    // Carica la cache di oggi per ciascuna sezione notizie, se presente
+    const sectionKeys = ['watchlist'].concat(NEWS_UNIVERSES.map(u => u.key));
+    for(const key of sectionKeys){
+      const cached = await storeGet(newsSectionKey(key));
+      if(cached){
+        try{
+          const parsed = JSON.parse(cached);
+          state.newsSections[key] = parsed.items || [];
+          state.sectionMeta[key].fetchedAt = parsed.fetchedAt || null;
+          renderSectionItems(key);
+          if(parsed.fetchedAt){
+            setSectionStatus(key, 'Aggiornato alle ' + new Date(parsed.fetchedAt).toLocaleTimeString('it-IT', {hour:'2-digit', minute:'2-digit'}));
+          }
+        }catch(e){ /* cache corrotta, ignora */ }
+      }
+    }
+    updateTape();
+    updateGlobalUpdatedLabel();
+
+    // Load today's cached value screen, if present
+    const cachedValue = await storeGet(valueDigestStorageKey());
+    if(cachedValue){
+      try{
+        valueState = JSON.parse(cachedValue);
+        rerenderValueFromState();
+        document.getElementById('valueStatusLine').textContent = 'Screening di oggi caricato. Premi "Aggiorna screening" per una nuova analisi.';
+      }catch(e){ valueState = { items: [], fetchedAt: null }; }
+    }
+
+    // Event listeners
+    document.getElementById('refreshAllBtn').addEventListener('click', refreshAllSequential);
+    document.getElementById('refreshValueBtn').addEventListener('click', refreshValueScreen);
+    document.getElementById('watchlistAddBtn').addEventListener('click', addToWatchlist);
+    document.getElementById('watchlistInput').addEventListener('keydown', e => { if(e.key === 'Enter') addToWatchlist(); });
+
+    document.getElementById('searchInput').addEventListener('input', e => {
+      state.searchTerm = e.target.value;
+      Object.keys(state.newsSections).forEach(key => renderSectionItems(key));
+    });
+
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.addEventListener('click', () => switchView(b.dataset.view));
+    });
+
+    document.getElementById('companySearchBtn').addEventListener('click', () => {
+      lookupCompany(document.getElementById('companySearchInput').value);
+    });
+    document.getElementById('companySearchInput').addEventListener('keydown', e => {
+      if(e.key === 'Enter') lookupCompany(e.target.value);
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', async () => {
+      if(!confirm('Cancellare la watchlist e tutte le schede aziendali salvate? Le notizie gia cercate oggi non verranno toccate.')) return;
+      const keys = await storeList('company:');
+      for(const k of keys) await storeDelete(k);
+      await storeDelete('watchlist');
+      state.watchlist = [];
+      state.companies = {};
+      renderWatchlist();
+      renderCompanyGrid();
+    });
+  }
+
+  init();
+
+})();
+</script>
+</body>
+</html>
